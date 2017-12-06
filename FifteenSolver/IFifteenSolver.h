@@ -9,4 +9,6 @@ public:
 	virtual uint32_t	GetCheckedCount() = 0;
 	virtual uint32_t	GetChangedCount() = 0;
 	virtual bool		IsSolved() = 0;
+
+	virtual ~IFifteenSolver() {}
 };

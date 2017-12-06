@@ -56,6 +56,7 @@ namespace FifteenBase
 	inline Fifteen<Width, Height>::Fifteen(const std::vector<uint8_t>& aData)
 	{
 		assert(aData.size() == Width*Height);
+
 		for (uint16_t i = 0; i < aData.size(); ++i)
 		{
 			if (aData[i] == 0)

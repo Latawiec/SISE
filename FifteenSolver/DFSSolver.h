@@ -1,7 +1,8 @@
 #pragma once
 #include <memory>
 #include <vector>
-
+#include <unordered_set>
+#include "boost/functional/hash.hpp"
 #include "FifteenSolver.h"
 
 class DFSSolver : public FifteenSolver
@@ -11,9 +12,14 @@ public:
 		:
 		FifteenSolver(aPuzzle, aSolution),
 		_lastStep(aLastStep)
-	{}
+	{
+		_maxRecursionDepth = 15;
+	}
 
-	~DFSSolver() {};
+	~DFSSolver()
+	{
+		_savedStates.erase(_hash);
+	};
 
 	bool		Solve() override;
 
@@ -26,5 +32,7 @@ protected:
 
 private:
 	FifteenSolver::Step _lastStep;
+	size_t _hash{};
+	static std::unordered_set<size_t> _savedStates;
 };
 

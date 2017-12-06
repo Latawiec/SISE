@@ -8,13 +8,20 @@ namespace FifteenBase {
 	class LoggingFifteen : public IFifteen
 	{
 	public:
+		static uint32_t objectsCount;
+
 		LoggingFifteen(std::unique_ptr<IFifteen> aFifteen, std::ostream& aOutput = std::cout)
 			: _fifteenObject(std::move(aFifteen)),
 			_output(aOutput)
-		{}
+		{
+			objectsCount++;
+			std::cout << "Objects count: " << objectsCount << '\n';
+		}
 
 		~LoggingFifteen()
 		{
+			objectsCount--;
+			_output.flush();
 			//_output << "Fifteen destroyed!\n";
 		}
 
@@ -63,7 +70,7 @@ namespace FifteenBase {
 				for (uint8_t y = 0; y < tableHeight; ++y)
 				{
 					// + makes cout print characters as their ASCII values xD;
-					_output << +tableRef[x + y*tableWidth] << ' ';
+					_output << +tableRef[y + x*tableWidth] << ' ';
 				}
 				_output << '\n';
 			}
@@ -84,4 +91,5 @@ namespace FifteenBase {
 		std::unique_ptr<IFifteen> _fifteenObject = nullptr;
 		std::ostream& _output;
 	};
+	uint32_t LoggingFifteen::objectsCount = 0;
 }
