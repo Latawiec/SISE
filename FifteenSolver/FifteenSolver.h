@@ -4,7 +4,7 @@
 
 #include "boost/functional/hash.hpp"
 #include "IFifteenSolver.h"
-#include "FifteenBase\IFifteen.h"
+#include "FifteenBase/IFifteen.h"
 
 class FifteenSolver : public IFifteenSolver
 {
@@ -21,6 +21,7 @@ public:
 	static uint32_t		MaxRecursionLevel;
 	bool				IsSolved() override;
 
+	size_t		GetRecursionLevel() override			{ return _recursionLevel; }
 	size_t		GetMaxReachedRecursionLevel() override  { return _maxReachedRecursion; }
 	size_t		GetCheckedCount() override				{ return _checkedCount; }
 	size_t		GetVistedStatesCount() override			{ return _visitedCount; }
@@ -43,6 +44,7 @@ protected:
 	size_t _visitedCount{};
 	size_t _checkedCount{};
 	size_t _stepsCount{};
+	size_t _recursionLevel{};
 	size_t _maxReachedRecursion;
 
 	static uint32_t _maxRecursionDepth;

@@ -29,18 +29,18 @@ bool DFSSolver::Solve()
 #endif
 
 	_checkedCount++;
-
+	if (/*_savedStates.size()*/_recursionLevel >= _maxRecursionDepth) { return false; }
 	if (IsSolved())
 	{
 		return true;
 	}
-	if (_savedStates.size() >= _maxRecursionDepth) { return false; }
+	_recursionLevel++;
 	
 	// Check if such item was already found before
 	
 	size_t hash = boost::hash_range(_puzzle->GetMatrix(), _puzzle->GetMatrix() + _puzzle->GetSize());
 	if (DFSSolver::_savedStates.find(hash) != DFSSolver::_savedStates.end()){
-		return false;
+		//return false;
 	}
 	DFSSolver::_savedStates.insert(hash);
 	
@@ -52,13 +52,14 @@ bool DFSSolver::Solve()
 	else
 	{
 		DFSSolver::_savedStates.erase(hash);
+		_recursionLevel--;
 		return false;
 	}
 }
 
 bool DFSSolver::MoveUp()
 {
-	if (_lastStep == FifteenSolver::Step::Down || !_puzzle->Up()) { return false; }
+	if (/*_lastStep == FifteenSolver::Step::Down ||*/ !_puzzle->Up()) { return false; }
 	FifteenSolver::Step rememberedLastStep = _lastStep;
 	_visitedCount++;
 	_stepsCount++;
@@ -78,7 +79,7 @@ bool DFSSolver::MoveUp()
 
 bool DFSSolver::MoveDown()
 {
-	if (_lastStep == FifteenSolver::Step::Up || !_puzzle->Down()) { return false; }
+	if (/*_lastStep == FifteenSolver::Step::Up ||*/ !_puzzle->Down()) { return false; }
 	FifteenSolver::Step rememberedLastStep = _lastStep;
 	_visitedCount++;
 	_stepsCount++;
@@ -98,7 +99,7 @@ bool DFSSolver::MoveDown()
 
 bool DFSSolver::MoveLeft()
 {
-	if (_lastStep == FifteenSolver::Step::Right || !_puzzle->Left()) { return false; }
+	if (/*_lastStep == FifteenSolver::Step::Right ||*/ !_puzzle->Left()) { return false; }
 	FifteenSolver::Step rememberedLastStep = _lastStep;
 	_visitedCount++;
 	_stepsCount++;
@@ -118,7 +119,7 @@ bool DFSSolver::MoveLeft()
 
 bool DFSSolver::MoveRight()
 {
-	if (_lastStep == FifteenSolver::Step::Left || !_puzzle->Right()) { return false; }
+	if (/*_lastStep == FifteenSolver::Step::Left ||*/ !_puzzle->Right()) { return false; }
 	FifteenSolver::Step rememberedLastStep = _lastStep;
 	_visitedCount++;
 	_stepsCount++;

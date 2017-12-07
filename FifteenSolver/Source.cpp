@@ -69,7 +69,7 @@ void Report(const std::shared_ptr<FifteenBase::IFifteen>& aPuzzle, const std::sh
 #define SOLUTION3x3 { 8, 7, 6, 5, 4, 3, 2, 1, 0 }
 #define SOLUTION2x2 { 3, 2, 1, 0 }
 
-#define INITIAL4x4 { 1, 3, 0, 4, 5, 2, 7, 8, 9, 6, 10, 12, 13, 14, 11, 15 }
+#define INITIAL4x4 { 1, 2, 3, 4, 5, 6, 7, 8, 13, 9, 11, 12, 10, 14, 0, 15 }
 #define INITIAL3x3 { 1, 1, 1, 1, 1, 1, 1, 1, 0 }
 int main()
 {

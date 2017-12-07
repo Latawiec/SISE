@@ -13,7 +13,7 @@ public:
 		FifteenSolver(aPuzzle, aSolution),
 		_lastStep(aLastStep)
 	{
-		_maxRecursionDepth = 30;
+		_maxRecursionDepth =  5000;
 	}
 
 	~DFSSolver()
