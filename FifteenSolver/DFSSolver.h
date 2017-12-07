@@ -13,13 +13,11 @@ public:
 		FifteenSolver(aPuzzle, aSolution),
 		_lastStep(aLastStep)
 	{
-		_maxRecursionDepth = 15;
+		_maxRecursionDepth = 30;
 	}
 
 	~DFSSolver()
-	{
-		_savedStates.erase(_hash);
-	};
+	{};
 
 	bool		Solve() override;
 
@@ -32,7 +30,6 @@ protected:
 
 private:
 	FifteenSolver::Step _lastStep;
-	size_t _hash{};
 	static std::unordered_set<size_t> _savedStates;
 };
 

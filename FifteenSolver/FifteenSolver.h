@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 
+#include "boost/functional/hash.hpp"
 #include "IFifteenSolver.h"
 #include "FifteenBase\IFifteen.h"
 
@@ -20,9 +21,10 @@ public:
 	static uint32_t		MaxRecursionLevel;
 	bool				IsSolved() override;
 
-	uint32_t	GetRecursionLevel() override	{ return _recursionLevel; };
-	uint32_t	GetCheckedCount() override		{ return _checkedCount; }
-	uint32_t	GetChangedCount() override		{ return _changedCount; }
+	size_t		GetMaxReachedRecursionLevel() override  { return _maxReachedRecursion; }
+	size_t		GetCheckedCount() override				{ return _checkedCount; }
+	size_t		GetVistedStatesCount() override			{ return _visitedCount; }
+	size_t		GetStepsCount() override				{ return _stepsCount; }
 
 protected:
 	FifteenSolver(std::shared_ptr<FifteenBase::IFifteen> aPuzzle, const std::vector<uint8_t>& aSolution)
@@ -35,10 +37,14 @@ protected:
 	const std::vector<uint8_t>&				_solution;
 
 	bool BasicCompare();
+	bool SSECompare();
+	bool HashCompare();
 
-	uint32_t _changedCount{};
-	uint32_t _checkedCount{};
-	uint32_t _recursionLevel{};
+	size_t _visitedCount{};
+	size_t _checkedCount{};
+	size_t _stepsCount{};
+	size_t _maxReachedRecursion;
+
 	static uint32_t _maxRecursionDepth;
 
 	virtual bool MoveUp() = 0;

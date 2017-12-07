@@ -61,8 +61,8 @@ namespace FifteenBase
 		{
 			if (aData[i] == 0)
 			{
-				_blankPosition.x = i / Width;
-				_blankPosition.y = i % Height;
+				_blankPosition.x = i % Width;
+				_blankPosition.y = i / Width;
 			}
 			_matrix[i] = aData[i];
 		}
