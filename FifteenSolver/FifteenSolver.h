@@ -10,14 +10,6 @@ class FifteenSolver : public IFifteenSolver
 {
 public:
 
-	enum Step : uint8_t {
-		Initial,
-		Up,
-		Down,
-		Left,
-		Right
-	};
-
 	static uint32_t		MaxRecursionLevel;
 	bool				IsSolved() override;
 
@@ -26,6 +18,7 @@ public:
 	size_t		GetCheckedCount() override				{ return _checkedCount; }
 	size_t		GetVistedStatesCount() override			{ return _visitedCount; }
 	size_t		GetStepsCount() override				{ return _stepsCount; }
+	const std::vector<unsigned char>& GetSteps() override { return _sequence; }
 
 protected:
 	FifteenSolver(std::shared_ptr<FifteenBase::IFifteen> aPuzzle, const std::vector<uint8_t>& aSolution)
@@ -39,13 +32,13 @@ protected:
 
 	bool BasicCompare();
 	bool SSECompare();
-	bool HashCompare();
 
 	size_t _visitedCount{};
 	size_t _checkedCount{};
 	size_t _stepsCount{};
 	size_t _recursionLevel{};
 	size_t _maxReachedRecursion;
+	std::vector<unsigned char> _sequence;
 
 	static uint32_t _maxRecursionDepth;
 

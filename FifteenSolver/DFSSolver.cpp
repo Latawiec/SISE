@@ -3,8 +3,6 @@
 
 #include <iostream>
 
-std::unordered_set<size_t> DFSSolver::_savedStates = {};
-
 //#define KURWA_MAC
 
 bool DFSSolver::Solve()
@@ -29,29 +27,19 @@ bool DFSSolver::Solve()
 #endif
 
 	_checkedCount++;
-	if (/*_savedStates.size()*/_recursionLevel >= _maxRecursionDepth) { return false; }
+	if (_recursionLevel > _maxRecursionDepth) { return false; }
 	if (IsSolved())
 	{
 		return true;
 	}
 	_recursionLevel++;
 	
-	// Check if such item was already found before
-	
-	size_t hash = boost::hash_range(_puzzle->GetMatrix(), _puzzle->GetMatrix() + _puzzle->GetSize());
-	if (DFSSolver::_savedStates.find(hash) != DFSSolver::_savedStates.end()){
-		//return false;
-	}
-	DFSSolver::_savedStates.insert(hash);
-	
-
-	if ( MoveLeft() || MoveRight() || MoveUp() || MoveDown() )
+	if ( _moves[0]() || _moves[1]() || _moves[2]() || _moves[3]() )
 	{
 		return true;
 	}
 	else
 	{
-		DFSSolver::_savedStates.erase(hash);
 		_recursionLevel--;
 		return false;
 	}
@@ -59,19 +47,17 @@ bool DFSSolver::Solve()
 
 bool DFSSolver::MoveUp()
 {
-	if (/*_lastStep == FifteenSolver::Step::Down ||*/ !_puzzle->Up()) { return false; }
-	FifteenSolver::Step rememberedLastStep = _lastStep;
+	if (!_puzzle->Up()) { return false; }
 	_visitedCount++;
 	_stepsCount++;
-	_lastStep = FifteenSolver::Step::Up;
 	if (Solve())
 	{
+		_sequence[--_recursionLevel] = 'U';
 		return true;
 	}
 	else
 	{
 		_stepsCount--;
-		_lastStep = rememberedLastStep;
 		_puzzle->Down();
 		return false;
 	}
@@ -79,19 +65,17 @@ bool DFSSolver::MoveUp()
 
 bool DFSSolver::MoveDown()
 {
-	if (/*_lastStep == FifteenSolver::Step::Up ||*/ !_puzzle->Down()) { return false; }
-	FifteenSolver::Step rememberedLastStep = _lastStep;
+	if (!_puzzle->Down()) { return false; }
 	_visitedCount++;
 	_stepsCount++;
-	_lastStep = FifteenSolver::Step::Down;
 	if (Solve())
 	{
+		_sequence[--_recursionLevel] = 'D';
 		return true;
 	}
 	else
 	{
 		_stepsCount--;
-		_lastStep = rememberedLastStep;
 		_puzzle->Up();
 		return false;
 	}
@@ -99,19 +83,17 @@ bool DFSSolver::MoveDown()
 
 bool DFSSolver::MoveLeft()
 {
-	if (/*_lastStep == FifteenSolver::Step::Right ||*/ !_puzzle->Left()) { return false; }
-	FifteenSolver::Step rememberedLastStep = _lastStep;
+	if (!_puzzle->Left()) { return false; }
 	_visitedCount++;
 	_stepsCount++;
-	_lastStep = FifteenSolver::Step::Left;
 	if (Solve())
 	{
+		_sequence[--_recursionLevel] = 'L';
 		return true;
 	}
 	else
 	{
 		_stepsCount--;
-		_lastStep = rememberedLastStep;
 		_puzzle->Right();
 		return false;
 	}
@@ -119,19 +101,18 @@ bool DFSSolver::MoveLeft()
 
 bool DFSSolver::MoveRight()
 {
-	if (/*_lastStep == FifteenSolver::Step::Left ||*/ !_puzzle->Right()) { return false; }
-	FifteenSolver::Step rememberedLastStep = _lastStep;
+	if (!_puzzle->Right()) { return false; }
 	_visitedCount++;
 	_stepsCount++;
-	_lastStep = FifteenSolver::Step::Right;
 	if (Solve())
 	{
+
+		_sequence[--_recursionLevel] = 'R';
 		return true;
 	}
 	else
 	{
 		_stepsCount--;
-		_lastStep = rememberedLastStep;
 		_puzzle->Left();
 		return false;
 	}

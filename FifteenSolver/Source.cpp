@@ -62,14 +62,14 @@ void Report(const std::shared_ptr<FifteenBase::IFifteen>& aPuzzle, const std::sh
 	std::cout << "Steps to given solution: " << aSolver->GetStepsCount() << '\n';
 	std::cout << "Total states visited: " << aSolver->GetVistedStatesCount() << '\n';
 	std::cout << "Total states processed: " << aSolver->GetCheckedCount() << '\n';
-
+	std::cout << "Steps to the solution: " << aSolver->GetSteps().data() << '\n';
 	std::this_thread::sleep_for(std::chrono::seconds(10));
 }
 #define SOLUTION4x4 { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0 }
 #define SOLUTION3x3 { 8, 7, 6, 5, 4, 3, 2, 1, 0 }
 #define SOLUTION2x2 { 3, 2, 1, 0 }
 
-#define INITIAL4x4 { 1, 2, 3, 4, 5, 6, 7, 8, 13, 9, 11, 12, 10, 14, 0, 15 }
+#define INITIAL4x4 { 1, 2, 3, 4, 0, 5, 6, 8, 9, 11, 7, 12, 13, 10, 14, 15}
 #define INITIAL3x3 { 1, 1, 1, 1, 1, 1, 1, 1, 0 }
 int main()
 {
@@ -81,7 +81,7 @@ int main()
 
 	std::vector<uint8_t> solution = SOLUTION4x4;
 
-	std::shared_ptr<IFifteenSolver> solver = std::make_shared<DFSSolver>(puzzle, solution);
+	std::shared_ptr<IFifteenSolver> solver = std::make_shared<DFSSolver>(puzzle, solution, "lrud");
 
 	assert(solver->IsSolved() == false);
 	//puzzle->Down();
@@ -91,6 +91,7 @@ int main()
 	std::thread t(std::bind(&Report, puzzle, solver, &isDone));
 	t.detach();
 	
+	std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	start = std::chrono::system_clock::now();
 	Solved = solver->Solve();
 	end = std::chrono::system_clock::now();

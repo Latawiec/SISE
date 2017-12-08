@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <functional>
 #include <unordered_set>
 #include "boost/functional/hash.hpp"
 #include "FifteenSolver.h"
@@ -8,12 +9,35 @@
 class DFSSolver : public FifteenSolver
 {
 public:
-	DFSSolver(std::shared_ptr<FifteenBase::IFifteen> aPuzzle, const std::vector<uint8_t>& aSolution, FifteenSolver::Step aLastStep = FifteenSolver::Step::Initial)
+	DFSSolver(std::shared_ptr<FifteenBase::IFifteen> aPuzzle, const std::vector<uint8_t>& aSolution, const std::string& aMoveset)
 		:
-		FifteenSolver(aPuzzle, aSolution),
-		_lastStep(aLastStep)
+		FifteenSolver(aPuzzle, aSolution)
 	{
-		_maxRecursionDepth =  5000;
+		_maxRecursionDepth =  30;
+		_sequence = std::vector<unsigned char>(_maxRecursionDepth);
+		assert(aMoveset.size() == 4);
+		for (uint8_t i = 0; i < 4; ++i)
+		{
+			switch (aMoveset[i])
+			{
+			case 'l':
+			case 'L':
+				_moves[i] = std::bind(&DFSSolver::MoveLeft, this);
+				break;
+			case 'r':
+			case 'R':
+				_moves[i] = std::bind(&DFSSolver::MoveRight, this);
+				break;
+			case 'u':
+			case 'U':
+				_moves[i] = std::bind(&DFSSolver::MoveUp, this);
+				break;
+			case 'd':
+			case 'D':
+				_moves[i] = std::bind(&DFSSolver::MoveDown, this);
+				break;
+			}
+		}
 	}
 
 	~DFSSolver()
@@ -29,7 +53,6 @@ protected:
 	bool MoveDown() override;
 
 private:
-	FifteenSolver::Step _lastStep;
-	static std::unordered_set<size_t> _savedStates;
+	std::function<bool()> _moves[4];
 };
 
