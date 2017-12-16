@@ -9,8 +9,6 @@
 class FifteenSolver : public IFifteenSolver
 {
 public:
-
-	static uint32_t		MaxRecursionLevel;
 	bool				IsSolved() override;
 
 	size_t		GetRecursionLevel() override			{ return _recursionLevel; }
