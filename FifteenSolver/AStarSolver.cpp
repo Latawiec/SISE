@@ -22,7 +22,7 @@ bool AStarSolver::Solve()
 		std::sort(indices, indices + 4, [&heuristicResult](const uint8_t a, const uint8_t b) { return heuristicResult.values[a] < heuristicResult.values[b]; });
 	}
 	
-	if (heuristicResult.values[indices[0]] > _lastSmallesHeuristic) { _recursionLevel--; return false; }
+	if (heuristicResult.values[indices[0]] >= _lastSmallesHeuristic) { _recursionLevel--; return false; }
 	uint16_t rememberedHeuristic = _lastSmallesHeuristic;
 	_lastSmallesHeuristic = heuristicResult.values[indices[0]];
 
@@ -47,6 +47,7 @@ bool AStarSolver::MoveUp()
 
 	if (Solve())
 	{
+		_checkedCount++;
 		_sequence[--_recursionLevel] = 'U';
 		return true;
 	}
@@ -60,6 +61,7 @@ bool AStarSolver::MoveLeft()
 
 	if (Solve())
 	{
+		_checkedCount++;
 		_sequence[--_recursionLevel] = 'L';
 		return true;
 	}
@@ -73,6 +75,7 @@ bool AStarSolver::MoveRight()
 
 	if (Solve())
 	{
+		_checkedCount++;
 		_sequence[--_recursionLevel] = 'R';
 		return true;
 	}
@@ -86,6 +89,7 @@ bool AStarSolver::MoveDown()
 
 	if (Solve())
 	{
+		_checkedCount++;
 		_sequence[--_recursionLevel] = 'D';
 		return true;
 	}
@@ -95,6 +99,7 @@ bool AStarSolver::MoveDown()
 
 uint16_t AStarSolver::CheckUp()
 {
+	_visitedCount++;
 	if (!_puzzle->Up()) { return std::numeric_limits<uint16_t>::max(); }
 
 	uint16_t heuristic = HeuristicFunction(_puzzle->GetMatrix(), _solution.data(), _solution.size());
@@ -110,6 +115,7 @@ uint16_t AStarSolver::CheckUp()
 
 uint16_t AStarSolver::CheckDown()
 {
+	_visitedCount++;
 	if (!_puzzle->Down()) { return std::numeric_limits<uint16_t>::max(); }
 
 	uint16_t heuristic = HeuristicFunction(_puzzle->GetMatrix(), _solution.data(), _solution.size());
@@ -125,6 +131,7 @@ uint16_t AStarSolver::CheckDown()
 
 uint16_t AStarSolver::CheckLeft()
 {
+	_visitedCount++;
 	if (!_puzzle->Left()) { return std::numeric_limits<uint16_t>::max(); }
 
 	uint16_t heuristic = HeuristicFunction(_puzzle->GetMatrix(), _solution.data(), _solution.size());
@@ -140,6 +147,7 @@ uint16_t AStarSolver::CheckLeft()
 
 uint16_t AStarSolver::CheckRight()
 {
+	_visitedCount++;
 	if (!_puzzle->Right()) { return std::numeric_limits<uint16_t>::max(); }
 
 	uint16_t heuristic = HeuristicFunction(_puzzle->GetMatrix(), _solution.data(), _solution.size());
