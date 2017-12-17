@@ -3,7 +3,7 @@
 #include <vector>
 #include <functional>
 #include <unordered_set>
-#include "boost/functional/hash.hpp"
+
 #include "FifteenSolver.h"
 
 class DFSSolver : public FifteenSolver
@@ -43,7 +43,7 @@ public:
 	~DFSSolver()
 	{};
 
-	bool		Solve() override;
+	bool Solve() override;
 
 protected:
 

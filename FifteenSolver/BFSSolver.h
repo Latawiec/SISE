@@ -73,7 +73,11 @@ private:
 			return *moves[index];
 		}
 		std::function<bool()>* moves[3];
-	}_movesWithoutUp, _movesWithoutDown, _movesWithoutLeft, _movesWithoutRight;
+	}_movesWithoutUp,
+	 _movesWithoutDown,
+	 _movesWithoutLeft,
+	 _movesWithoutRight;
+
 	uint16_t _currentDepth = 0;
 };
 

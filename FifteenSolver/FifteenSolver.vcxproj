@@ -120,12 +120,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AStarSolver.cpp" />
     <ClCompile Include="BFSSolver.cpp" />
     <ClCompile Include="DFSSolver.cpp" />
     <ClCompile Include="FifteenSolver.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AStarSolver.h" />
     <ClInclude Include="BFSSolver.h" />
     <ClInclude Include="DFSSolver.h" />
     <ClInclude Include="FifteenSolver.h" />
