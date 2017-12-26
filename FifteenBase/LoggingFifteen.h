@@ -59,7 +59,7 @@ namespace FifteenBase {
 			return false;
 		}
 
-		const uint8_t* GetMatrix() override
+		const uint8_t* GetMatrix() const override
 		{
 			const uint8_t* tableRef = _fifteenObject->GetMatrix();
 			/*size_t tableWidth = _fifteenObject->GetWidth();
@@ -78,11 +78,11 @@ namespace FifteenBase {
 			return tableRef;
 		}
 
-		size_t GetSize() override { return _fifteenObject->GetSize(); }
-		size_t GetWidth() override { return _fifteenObject->GetWidth(); }
-		size_t GetHeight() override { return _fifteenObject->GetHeight(); }
+		const size_t GetSize() const override { return _fifteenObject->GetSize(); }
+		const size_t GetWidth() const override { return _fifteenObject->GetWidth(); }
+		const size_t GetHeight() const override { return _fifteenObject->GetHeight(); }
 
-		IFifteen* Clone() override
+		IFifteen* Clone() const override
 		{
 			return new LoggingFifteen(std::unique_ptr<IFifteen>(_fifteenObject->Clone()), _output);
 		}

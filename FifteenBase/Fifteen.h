@@ -22,15 +22,15 @@ namespace FifteenBase
 		bool Down() override;
 		bool Left() override;
 		bool Right() override;
-		const uint8_t* GetMatrix() override;
+		const uint8_t* GetMatrix() const override;
 
 		const uint8_t* GetBlankPosition() { return _blankPosition.position; }
 
-		size_t GetSize() override { return Width*Height; }
-		size_t GetWidth() override { return Width; }
-		size_t GetHeight() override { return Height; }
+		const size_t GetSize() const override { return Width*Height; }
+		const size_t GetWidth() const override { return Width; }
+		const size_t GetHeight() const override { return Height; }
 
-		IFifteen* Clone()
+		IFifteen* Clone() const
 		{
 			return new Fifteen(*this);
 		}
@@ -87,7 +87,9 @@ namespace FifteenBase
 		//Cannot move
 		if (_blankPosition.y == Height - 1) return false;
 
-		std::swap(_matrix[_blankPosition.x + _blankPosition.y*Width], _matrix[_blankPosition.x + (_blankPosition.y + 1)*Width]);
+		std::swap(
+			_matrix[_blankPosition.x + _blankPosition.y*Width],
+			_matrix[_blankPosition.x + (_blankPosition.y + 1)*Width]);
 		_blankPosition.y++;
 		return true;
 	}
@@ -98,7 +100,9 @@ namespace FifteenBase
 		//Cannot move
 		if (_blankPosition.x == 0) return false;
 
-		std::swap(_matrix[_blankPosition.x + _blankPosition.y*Width], _matrix[_blankPosition.x - 1 + _blankPosition.y*Width]);
+		std::swap(
+			_matrix[_blankPosition.x + _blankPosition.y*Width],
+			_matrix[_blankPosition.x - 1 + _blankPosition.y*Width]);
 		_blankPosition.x--;
 		return true;
 	}
@@ -109,13 +113,15 @@ namespace FifteenBase
 		//Cannot move
 		if (_blankPosition.x == Width - 1) return false;
 
-		std::swap(_matrix[_blankPosition.x + _blankPosition.y*Width], _matrix[_blankPosition.x + 1 + _blankPosition.y*Width]);
+		std::swap(
+			_matrix[_blankPosition.x + _blankPosition.y*Width],
+			_matrix[_blankPosition.x + 1 + _blankPosition.y*Width]);
 		_blankPosition.x++;
 		return true;
 	}
 
 	template<size_t Width, size_t Height>
-	inline const uint8_t* Fifteen<Width, Height>::GetMatrix()
+	inline const uint8_t* Fifteen<Width, Height>::GetMatrix() const
 	{
 		return _matrix.data();
 	}

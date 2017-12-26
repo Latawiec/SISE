@@ -2,7 +2,6 @@
 #include <stdint.h>
 #include <emmintrin.h>
 
-uint32_t FifteenSolver::_maxRecursionDepth = 20;
 
 bool FifteenSolver::IsSolved()
 {

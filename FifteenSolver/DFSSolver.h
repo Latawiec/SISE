@@ -9,12 +9,10 @@
 class DFSSolver : public FifteenSolver
 {
 public:
-	DFSSolver(std::shared_ptr<FifteenBase::IFifteen> aPuzzle, const std::vector<uint8_t>& aSolution, const std::string& aMoveset)
+	DFSSolver(std::unique_ptr<FifteenBase::IFifteen>&& aPuzzle, const std::vector<uint8_t>& aSolution, const std::string& aMoveset)
 		:
-		FifteenSolver(aPuzzle, aSolution)
+		FifteenSolver(std::move(aPuzzle), aSolution)
 	{
-		_maxRecursionDepth =  30;
-		_sequence = std::vector<unsigned char>(_maxRecursionDepth);
 		assert(aMoveset.size() == 4);
 		for (uint8_t i = 0; i < 4; ++i)
 		{

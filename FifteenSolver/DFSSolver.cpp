@@ -3,29 +3,8 @@
 
 #include <iostream>
 
-//#define KURWA_MAC
-
 bool DFSSolver::Solve()
 {
-#ifdef KURWA_MAC
-	std::cout << "Current State: \n";
-	const uint8_t* puzzleTable = _puzzle->GetMatrix();
-	uint8_t puzzleWidth = _puzzle->GetWidth();
-	uint8_t puzzleHeight = _puzzle->GetHeight();
-
-	for (uint8_t x = 0; x < puzzleWidth; ++x)
-	{
-		std::cout << std::flush;
-		for (uint8_t y = 0; y < puzzleHeight; ++y)
-		{
-			// + makes cout print characters as their ASCII values xD;
-			std::cout << +puzzleTable[y + x*puzzleWidth] << ' ';
-		}
-		std::cout << '\n';
-	}
-	std::cout << '\n';
-#endif
-
 	_checkedCount++;
 	if (_recursionLevel > _maxRecursionDepth) { return false; }
 	if (IsSolved())

@@ -1,21 +1,20 @@
 #pragma once
 #include "FifteenSolver.h"
+#include <queue>
 class AStarSolver : public FifteenSolver
 {
 public:
-	AStarSolver(std::shared_ptr<FifteenBase::IFifteen>					aPuzzle,
-				const std::vector<uint8_t>&								aSolution,
-				std::function<uint16_t(const uint8_t*, const uint8_t*, uint8_t)>	aFunction)
+	AStarSolver(std::unique_ptr<FifteenBase::IFifteen>&&				aPuzzle,
+		const std::vector<uint8_t>&								aSolution,
+		std::function<uint16_t(const uint8_t*, const uint8_t*, uint8_t, uint8_t, uint8_t)>	aFunction)
 		:
-		FifteenSolver(aPuzzle, aSolution),
+		FifteenSolver(std::move(aPuzzle), aSolution),
 		HeuristicFunction(aFunction)
 	{
-		_maxRecursionDepth = 30;
-		_sequence = std::vector<unsigned char>(_maxRecursionDepth);
-		_moveset[0] = std::bind(&AStarSolver::MoveUp,		this);
-		_moveset[1] = std::bind(&AStarSolver::MoveDown,		this);
-		_moveset[2] = std::bind(&AStarSolver::MoveLeft,		this);
-		_moveset[3] = std::bind(&AStarSolver::MoveRight,	this);
+		uint16_t heuristic = HeuristicFunction(_puzzle->GetMatrix(), _solution.data(), _solution.size(), _puzzle->GetWidth(), _puzzle->GetHeight());
+		queue.push(Node{ std::unique_ptr<FifteenBase::IFifteen>(_puzzle->Clone()), heuristic });
+
+		//currentPuzzle = queue.top().Release();
 	}
 
 	AStarSolver() = delete;
@@ -32,23 +31,25 @@ protected:
 	bool MoveLeft() override;
 	bool MoveRight() override;
 
-	uint16_t CheckUp();
-	uint16_t CheckDown();
-	uint16_t CheckLeft();
-	uint16_t CheckRight();
+	std::function<uint16_t(const uint8_t*, const uint8_t*, uint8_t, uint8_t, uint8_t)> HeuristicFunction;
 
-	union HeuristicValues {
-		uint16_t values[4];
-		struct {
-			uint16_t up;
-			uint16_t down;
-			uint16_t left;
-			uint16_t right;
+	struct Node {
+		mutable std::unique_ptr<FifteenBase::IFifteen>	fifteen;
+		uint16_t										heuristicValue = std::numeric_limits<uint16_t>::max();
+
+		std::unique_ptr<FifteenBase::IFifteen>&& Release() const
+		{
+			return std::move(fifteen);
+		}
+
+		struct Compare {
+			constexpr bool operator()(const Node& left, const Node& right) const {
+				return left.heuristicValue > right.heuristicValue;
+			}
 		};
 	};
 
-	std::function<bool()> _moveset[4];
-	uint16_t _lastSmallesHeuristic = 65535;
-	std::function<uint16_t(const uint8_t*, const uint8_t*, uint8_t)> HeuristicFunction;
+	std::priority_queue<Node, std::vector<Node>, Node::Compare> queue{ Node::Compare{} };
+	std::unique_ptr<FifteenBase::IFifteen> currentPuzzle = nullptr;
 };
 

@@ -16,7 +16,7 @@ std::chrono::system_clock::time_point end;
 
 bool Solved;
 
-void Report(const std::shared_ptr<FifteenBase::IFifteen>& aPuzzle, const std::shared_ptr<IFifteenSolver>& aSolver, bool* isDone)
+void Report(IFifteenSolver* aSolver, FifteenBase::IFifteen* aPuzzle, bool* isDone)
 {
 	std::lock_guard<std::mutex> lock(StopReport);
 
@@ -60,7 +60,7 @@ void Report(const std::shared_ptr<FifteenBase::IFifteen>& aPuzzle, const std::sh
 	{
 		std::cout << "No solution found :(((((((((( \n";
 	}
-
+	std::cout << ' ' << "Total time elapsed: " << std::chrono::duration<double>(end - start).count() << '\n';
 	std::cout << "Steps to given solution: "	<< aSolver->GetStepsCount() << '\n';
 	std::cout << "Total states visited: "		<< aSolver->GetVistedStatesCount() << '\n';
 	std::cout << "Total states processed: "		<< aSolver->GetCheckedCount() << '\n';
@@ -68,7 +68,7 @@ void Report(const std::shared_ptr<FifteenBase::IFifteen>& aPuzzle, const std::sh
 	std::this_thread::sleep_for(std::chrono::seconds(10));
 }
 #define SOLUTION4x4 { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0 }
-#define SOLUTION3x3 { 8, 7, 6, 5, 4, 3, 2, 1, 0 }
+#define SOLUTION3x3 { 1, 2, 3, 4, 5, 6, 7, 8, 0 }
 #define SOLUTION2x2 { 3, 2, 1, 0 }
 
 #define INITIAL4x4 {	1,	3,	0,	4,	\
@@ -79,20 +79,20 @@ void Report(const std::shared_ptr<FifteenBase::IFifteen>& aPuzzle, const std::sh
 //						5,	6,	7,	8,	\
 //						9,	10,	11, 0,	\
 //						13, 14, 15, 12 }
-#define INITIAL3x3 { 1, 1, 1, 1, 1, 1, 1, 1, 0 }
+#define INITIAL3x3 { 1, 2, 3, 4, 8, 5, 7, 6, 0 }
 int main()
 {
 	using namespace FifteenBase;
 
 
 	//std::shared_ptr<IFifteen> puzzle = std::make_shared<LoggingFifteen>(std::unique_ptr<IFifteen>(new Fifteen<3,3>({0,1,2,3,4,5,6,7,8})));
-	std::shared_ptr<IFifteen> puzzle = std::make_shared<Fifteen<4, 4>>(std::vector<uint8_t>INITIAL4x4);
+	std::unique_ptr<IFifteen> puzzle = std::make_unique<Fifteen<4, 4>>(std::vector<uint8_t>INITIAL4x4);
 
 	std::vector<uint8_t> solution = SOLUTION4x4;
-
-	//std::shared_ptr<IFifteenSolver> solver = std::make_shared<BFSSolver>(puzzle, solution, "ldru");
+	IFifteen* puzzleHandle = puzzle.get();
+	std::unique_ptr<IFifteenSolver> solver = std::make_unique<DFSSolver>(std::move(puzzle), solution, "rdul");
 	
-	//std::shared_ptr<IFifteenSolver> solver = std::make_shared<AStarSolver>(puzzle, solution, [](const uint8_t* tabA, const uint8_t* tabB, uint8_t size)->uint16_t
+	//std::shared_ptr<IFifteenSolver> solver = std::make_shared<AStarSolver>(std::move(puzzle), solution, [](const uint8_t* tabA, const uint8_t* tabB, uint8_t size, uint8_t width = 0, uint8_t height = 0)->uint16_t
 	//{
 	//	//Hamming
 	//	uint16_t result{};
@@ -103,38 +103,37 @@ int main()
 	//	return result;
 	//});
 
-	std::shared_ptr<IFifteenSolver> solver = std::make_shared<AStarSolver>(puzzle, solution, [](const uint8_t* tabA, const uint8_t* tabB, uint8_t size)->uint16_t
-	{
-		//Manhatan
-		uint16_t result{};
-		for(uint8_t i = 0; i<size; ++i)
-		{
-			uint16_t distance;
-			for(uint8_t j = 0; j<size; ++j)
-			{
-				if(tabA[i] == tabB[j])
-				{
-					distance = std::abs(j - i);
-					result += (distance / 4 + distance % 4);
-				}
-			}
-		}
-		return result;
-	});
+	//std::shared_ptr<IFifteenSolver> solver = std::make_shared<AStarSolver>(std::move(puzzle), solution, [](const uint8_t* tabA, const uint8_t* tabB, uint8_t size, uint8_t width = 0, uint8_t height = 0)->uint16_t
+	//{
+	//	//Manhatan
+	//	uint16_t result{};
+	//	for(uint8_t i = 0; i<size; ++i)
+	//	{
+	//		uint16_t distance;
+	//		for(uint8_t j = 0; j<size; ++j)
+	//		{
+	//			if(tabA[i] == tabB[j])
+	//			{
+	//				distance = std::abs(j - i);
+	//				result += (distance / width + distance % height);
+	//			}
+	//		}
+	//	}
+	//	return result;
+	//});
 
 	assert(solver->IsSolved() == false);
 	//puzzle->Down();
 	//assert(solver->IsSolved() == true);
 
 	bool isDone = false;
-	std::thread t(std::bind(&Report, puzzle, solver, &isDone));
+	std::thread t(std::bind(&Report, solver.get(), puzzleHandle, &isDone));
 	t.detach();
 	
-	std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	//std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	start = std::chrono::system_clock::now();
 	Solved = solver->Solve();
 	end = std::chrono::system_clock::now();
-
 	isDone = true;
 
 	{ // Sycnhronize trheads

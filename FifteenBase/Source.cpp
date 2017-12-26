@@ -18,13 +18,14 @@ int main()
 	std::cout << '\n';
 	shared->GetMatrix();*/
 
-	std::vector<uint8_t> initial{ 1, 2, 3, 4, 0, 5, 6, 8, 9, 11, 7, 12, 13, 10, 14, 15 };
+	std::vector<uint8_t> initial4x4{ 1, 2, 3, 4, 0, 5, 6, 8, 9, 11, 7, 12, 13, 10, 14, 15 };
+	std::vector<uint8_t> initial3x3{ 1, 2, 3, 4, 5, 6, 7, 8, 0 };
 
-	std::shared_ptr<FifteenBase::IFifteen> shared = std::make_shared<FifteenBase::Fifteen<4,4>>(initial);
+	std::unique_ptr<FifteenBase::IFifteen> fifteen = std::make_unique<FifteenBase::Fifteen<3,3>>(initial3x3);
 	
-	uint8_t width = shared->GetWidth();
-	uint8_t height = shared->GetHeight();
-	const uint8_t* table = shared->GetMatrix();
+	uint8_t width = fifteen->GetWidth();
+	uint8_t height = fifteen->GetHeight();
+	const uint8_t* table = fifteen->GetMatrix();
 	while (true)
 	{
 		for (uint8_t x = 0; x < width; ++x)
@@ -51,20 +52,20 @@ int main()
 		{
 		case 'w':
 		case 'W':
-			shared->Up();
+			fifteen->Up();
 			break;
 
 		case 's':
 		case 'S':
-			shared->Down();
+			fifteen->Down();
 			break;
 		case 'a':
 		case 'A':
-			shared->Left();
+			fifteen->Left();
 			break;
 		case 'd':
 		case 'D':
-			shared->Right();
+			fifteen->Right();
 			break;			
 		}
 		system("cls");

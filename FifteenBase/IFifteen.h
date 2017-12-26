@@ -11,14 +11,14 @@ namespace FifteenBase
 		virtual bool			Left() = 0;
 		virtual bool			Right() = 0;
 
-		virtual const uint8_t*	GetMatrix() = 0;
+		virtual const uint8_t*	GetMatrix() const = 0;
 
-		virtual size_t GetSize() = 0;
-		virtual size_t GetWidth() = 0;
-		virtual size_t GetHeight() = 0;
+		virtual const size_t GetSize() const = 0;
+		virtual const size_t GetWidth() const = 0;
+		virtual const size_t GetHeight() const = 0;
 
 		virtual ~IFifteen(){}
 
-		virtual IFifteen* Clone() = 0;
+		virtual IFifteen* Clone() const = 0;
 	};
 }

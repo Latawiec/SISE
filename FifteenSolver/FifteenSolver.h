@@ -19,13 +19,15 @@ public:
 	const std::vector<unsigned char>& GetSteps() override { return _sequence; }
 
 protected:
-	FifteenSolver(std::shared_ptr<FifteenBase::IFifteen> aPuzzle, const std::vector<uint8_t>& aSolution)
+	FifteenSolver(std::unique_ptr<FifteenBase::IFifteen>&& aPuzzle, const std::vector<uint8_t>& aSolution, uint32_t aMaxRecursion = 30)
 		:
-		_puzzle(aPuzzle),
-		_solution(aSolution)
+		_puzzle(std::move(aPuzzle)),
+		_solution(aSolution),
+		_maxRecursionDepth(aMaxRecursion),
+		_sequence(aMaxRecursion)
 	{}
 
-	std::shared_ptr<FifteenBase::IFifteen>	_puzzle{ nullptr };
+	std::unique_ptr<FifteenBase::IFifteen>	_puzzle{ nullptr };
 	const std::vector<uint8_t>&				_solution;
 
 	bool BasicCompare();
@@ -38,7 +40,7 @@ protected:
 	size_t _maxReachedRecursion;
 	std::vector<unsigned char> _sequence;
 
-	static uint32_t _maxRecursionDepth;
+	uint32_t _maxRecursionDepth;
 
 	virtual bool MoveUp() = 0;
 	virtual bool MoveLeft() = 0;
