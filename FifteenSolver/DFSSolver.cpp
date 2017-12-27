@@ -5,7 +5,6 @@
 
 bool DFSSolver::Solve()
 {
-	_checkedCount++;
 	if (_recursionLevel > _maxRecursionDepth) { return false; }
 	if (IsSolved())
 	{
@@ -20,6 +19,7 @@ bool DFSSolver::Solve()
 	else
 	{
 		_recursionLevel--;
+		_checkedCount++;
 		return false;
 	}
 }
@@ -27,8 +27,8 @@ bool DFSSolver::Solve()
 bool DFSSolver::MoveUp()
 {
 	if (!_puzzle->Up()) { return false; }
-	_visitedCount++;
 	_stepsCount++;
+	_visitedCount++;
 	if (Solve())
 	{
 		_sequence[--_recursionLevel] = 'U';
@@ -45,8 +45,8 @@ bool DFSSolver::MoveUp()
 bool DFSSolver::MoveDown()
 {
 	if (!_puzzle->Down()) { return false; }
-	_visitedCount++;
 	_stepsCount++;
+	_visitedCount++;
 	if (Solve())
 	{
 		_sequence[--_recursionLevel] = 'D';
@@ -63,8 +63,8 @@ bool DFSSolver::MoveDown()
 bool DFSSolver::MoveLeft()
 {
 	if (!_puzzle->Left()) { return false; }
-	_visitedCount++;
 	_stepsCount++;
+	_visitedCount++;
 	if (Solve())
 	{
 		_sequence[--_recursionLevel] = 'L';
@@ -81,8 +81,8 @@ bool DFSSolver::MoveLeft()
 bool DFSSolver::MoveRight()
 {
 	if (!_puzzle->Right()) { return false; }
-	_visitedCount++;
 	_stepsCount++;
+	_visitedCount++;
 	if (Solve())
 	{
 

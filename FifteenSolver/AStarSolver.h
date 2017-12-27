@@ -14,7 +14,6 @@ public:
 		uint16_t heuristic = HeuristicFunction(_puzzle->GetMatrix(), _solution.data(), _solution.size(), _puzzle->GetWidth(), _puzzle->GetHeight());
 		queue.push(Node{ std::unique_ptr<FifteenBase::IFifteen>(_puzzle->Clone()), heuristic });
 
-		//currentPuzzle = queue.top().Release();
 	}
 
 	AStarSolver() = delete;
@@ -36,6 +35,8 @@ protected:
 	struct Node {
 		mutable std::unique_ptr<FifteenBase::IFifteen>	fifteen;
 		uint16_t										heuristicValue = std::numeric_limits<uint16_t>::max();
+		size_t											depth = 0;
+		uint8_t											move;
 
 		std::unique_ptr<FifteenBase::IFifteen>&& Release() const
 		{

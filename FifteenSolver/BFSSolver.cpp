@@ -6,6 +6,7 @@ bool BFSSolver::Solve()
 	while (_recursionLevel < _maxRecursionDepth)
 	{
 		_currentDepth = 0;
+		_checkedCount = 0;
 		++_recursionLevel;
 		if (_moves[0]() || _moves[1]() || _moves[2]() || _moves[3]())
 		{
@@ -19,9 +20,9 @@ bool BFSSolver::MoveUp()
 {
 	if (!_puzzle->Up()) { return false; }
 	++_currentDepth;
-
+	
 	if (_currentDepth == _recursionLevel){
-		_checkedCount++;
+		_visitedCount++;
 		if (IsSolved()){
 			_stepsCount++;
 			_sequence[--_currentDepth] = 'U';
@@ -30,6 +31,7 @@ bool BFSSolver::MoveUp()
 	}
 	else
 	{
+		_checkedCount++;
 		if (_movesWithoutDown[0]() || _movesWithoutDown[1]() || _movesWithoutDown[2]()){
 			_stepsCount++;
 			_sequence[--_currentDepth] = 'U';
@@ -47,7 +49,7 @@ bool BFSSolver::MoveLeft()
 	++_currentDepth;
 
 	if (_currentDepth == _recursionLevel) {
-		_checkedCount++;
+		_visitedCount++;
 		if (IsSolved()) {
 			_stepsCount++;
 			_sequence[--_currentDepth] = 'L';
@@ -56,6 +58,7 @@ bool BFSSolver::MoveLeft()
 	}
 	else
 	{
+		_checkedCount++;
 		if (_movesWithoutRight[0]() || _movesWithoutRight[1]() || _movesWithoutRight[2]()) {
 			_stepsCount++;
 			_sequence[--_currentDepth] = 'L';
@@ -73,7 +76,7 @@ bool BFSSolver::MoveRight()
 	++_currentDepth;
 
 	if (_currentDepth == _recursionLevel) {
-		_checkedCount++;
+		_visitedCount++;
 		if (IsSolved()) {
 			_stepsCount++;
 			_sequence[--_currentDepth] = 'R';
@@ -82,6 +85,7 @@ bool BFSSolver::MoveRight()
 	}
 	else
 	{
+		_checkedCount++;
 		if (_movesWithoutLeft[0]() || _movesWithoutLeft[1]() || _movesWithoutLeft[2]()) {
 			_stepsCount++;
 			_sequence[--_currentDepth] = 'R';
@@ -99,7 +103,7 @@ bool BFSSolver::MoveDown()
 	++_currentDepth;
 
 	if (_currentDepth == _recursionLevel) {
-		_checkedCount++;
+		_visitedCount++;
 		if (IsSolved()) {
 			_stepsCount++;
 			_sequence[--_currentDepth] = 'D';
@@ -108,6 +112,7 @@ bool BFSSolver::MoveDown()
 	}
 	else
 	{
+		_checkedCount++;
 		if (_movesWithoutUp[0]() || _movesWithoutUp[1]() || _movesWithoutUp[2]()) {
 			_stepsCount++;
 			_sequence[--_currentDepth] = 'D';

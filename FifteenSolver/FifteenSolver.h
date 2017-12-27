@@ -24,7 +24,7 @@ protected:
 		_puzzle(std::move(aPuzzle)),
 		_solution(aSolution),
 		_maxRecursionDepth(aMaxRecursion),
-		_sequence(aMaxRecursion)
+		_sequence(aMaxRecursion+1)
 	{}
 
 	std::unique_ptr<FifteenBase::IFifteen>	_puzzle{ nullptr };
