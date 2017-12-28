@@ -91,36 +91,36 @@ int main()
 	IFifteen* puzzleHandle = puzzle.get();
 	//std::unique_ptr<IFifteenSolver> solver = std::make_unique<DFSSolver>(std::move(puzzle), solution, "rdul");
 	
-	//std::shared_ptr<IFifteenSolver> solver = std::make_shared<AStarSolver>(std::move(puzzle), solution, [](const uint8_t* tabA, const uint8_t* tabB, uint8_t size, uint8_t width = 0, uint8_t height = 0)->uint16_t
-	//{
-	//	//Hamming
-	//	uint16_t result{};
-	//	while (0 <-- size)
-	//	{
-	//		if (tabA[size] != tabB[size]) result++;
-	//	}
-	//	return result;
-	//});
-
-	std::shared_ptr<IFifteenSolver> solver = std::make_shared<AStarSolver>(std::move(puzzle), solution,
-		[](const uint8_t* tabA, const uint8_t* tabB, uint8_t size, uint8_t width = 0, uint8_t height = 0)->uint16_t
+	std::shared_ptr<IFifteenSolver> solver = std::make_shared<AStarSolver>(std::move(puzzle), solution, [](const uint8_t* tabA, const uint8_t* tabB, uint8_t size, uint8_t width = 0, uint8_t height = 0)->uint16_t
 	{
-		//Manhatan
+		//Hamming
 		uint16_t result{};
-		for(uint8_t i = 0; i<size; ++i)
+		while (0 <-- size)
 		{
-			uint16_t distance;
-			for(uint8_t j = 0; j<size; ++j)
-			{
-				if(tabA[i] == tabB[j])
-				{
-					distance = std::abs(j - i);
-					result += (distance / width + distance % height);
-				}
-			}
+			if (tabA[size] != tabB[size]) result++;
 		}
 		return result;
 	});
+
+	//std::shared_ptr<IFifteenSolver> solver = std::make_shared<AStarSolver>(std::move(puzzle), solution,
+	//	[](const uint8_t* tabA, const uint8_t* tabB, uint8_t size, uint8_t width = 0, uint8_t height = 0)->uint16_t
+	//{
+	//	//Manhatan
+	//	uint16_t result{};
+	//	for(uint8_t i = 0; i<size; ++i)
+	//	{
+	//		uint16_t distance;
+	//		for(uint8_t j = 0; j<size; ++j)
+	//		{
+	//			if(tabA[i] == tabB[j])
+	//			{
+	//				distance = std::abs(j - i);
+	//				result += (distance / width + distance % height);
+	//			}
+	//		}
+	//	}
+	//	return result;
+	//});
 
 	assert(solver->IsSolved() == false);
 	//puzzle->Down();

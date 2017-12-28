@@ -5,7 +5,7 @@
 
 bool DFSSolver::Solve()
 {
-	if (_recursionLevel > _maxRecursionDepth) { return false; }
+	if (_recursionLevel >= _maxRecursionDepth) { return false; }
 	if (IsSolved())
 	{
 		return true;

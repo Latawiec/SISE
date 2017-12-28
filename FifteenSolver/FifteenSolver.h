@@ -19,7 +19,7 @@ public:
 	const std::vector<unsigned char>& GetSteps() override { return _sequence; }
 
 protected:
-	FifteenSolver(std::unique_ptr<FifteenBase::IFifteen>&& aPuzzle, const std::vector<uint8_t>& aSolution, uint32_t aMaxRecursion = 30)
+	FifteenSolver(std::unique_ptr<FifteenBase::IFifteen>&& aPuzzle, const std::vector<uint8_t>& aSolution, uint32_t aMaxRecursion = 15)
 		:
 		_puzzle(std::move(aPuzzle)),
 		_solution(aSolution),

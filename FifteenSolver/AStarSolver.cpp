@@ -3,33 +3,41 @@
 
 bool AStarSolver::Solve()
 {
-	
-	if (queue.empty()) return false;
-	_recursionLevel = queue.top().depth + 1;
-	size_t  lastDepth = queue.top().depth - 1;
-	uint8_t lastMove = queue.top().move;
-	currentPuzzle = queue.top().Release();
-	queue.pop();
-	if (MoveUp()   ||
-		MoveDown() ||
-		MoveLeft() ||
-		MoveRight()) {
-		_sequence[lastDepth] = lastMove;
-		_stepsCount++;
-		return true;
-	}
-
-	_checkedCount++;
-
-	if (_recursionLevel < _maxRecursionDepth)
+	while (!queue.empty())
 	{
-		_sequence[lastDepth] = lastMove;
-		_stepsCount++;
-		return Solve();
+		_recursionLevel = queue.top().depth + 1;
+		if (_recursionLevel > _maxRecursionDepth)
+		{
+			queue.pop();
+			continue;
+		}
+		_sequence[queue.top().depth] = queue.top().move;
+		currentPuzzle = queue.top().Release();
+		queue.pop();
+		if (MoveUp()   ||
+			MoveDown() ||
+			MoveLeft() ||
+			MoveRight()) {
+			_sequence[_recursionLevel+1] = '\0';
+			std::rotate(_sequence.begin(), _sequence.begin() + 1, _sequence.end());
+			_stepsCount = _recursionLevel;
+			return true;
+		}
+
+		_checkedCount++;
+
+	//
+	//_stepsCount++;
+	//while (!queue.empty())
+	//{
+	//	if (Solve())
+	//	{
+	//		_sequence[lastDepth] = lastMove;
+	//		return true;
+	//	}
+	//}
 	}
-	else {
-		return false;
-	}
+	return false;
 }
 
 bool AStarSolver::MoveUp()
@@ -40,7 +48,7 @@ bool AStarSolver::MoveUp()
 		uint16_t heuristic = HeuristicFunction(currentPuzzle->GetMatrix(), _solution.data(), _solution.size(), _puzzle->GetWidth(), _puzzle->GetHeight());
 
 		if (heuristic == 0) {
-			_sequence[_recursionLevel-1] = 'U';
+			_sequence[_recursionLevel] = 'U';
 			return true;
 		}
 		queue.push(Node{ std::unique_ptr<FifteenBase::IFifteen>(currentPuzzle->Clone()), heuristic, _recursionLevel, 'U' });
@@ -57,7 +65,7 @@ bool AStarSolver::MoveLeft()
 		uint16_t heuristic = HeuristicFunction(currentPuzzle->GetMatrix(), _solution.data(), _solution.size(), _puzzle->GetWidth(), _puzzle->GetHeight());
 
 		if (heuristic == 0) {
-			_sequence[_recursionLevel-1] = 'L';
+			_sequence[_recursionLevel] = 'L';
 			return true;
 		}
 		queue.push(Node{ std::unique_ptr<FifteenBase::IFifteen>(currentPuzzle->Clone()), heuristic, _recursionLevel, 'L' });
@@ -74,7 +82,7 @@ bool AStarSolver::MoveRight()
 		uint16_t heuristic = HeuristicFunction(currentPuzzle->GetMatrix(), _solution.data(), _solution.size(), _puzzle->GetWidth(), _puzzle->GetHeight());
 
 		if (heuristic == 0) {
-			_sequence[_recursionLevel-1] = 'R';
+			_sequence[_recursionLevel] = 'R';
 			return true;
 		}
 		queue.push(Node{ std::unique_ptr<FifteenBase::IFifteen>(currentPuzzle->Clone()), heuristic, _recursionLevel, 'R' });
@@ -91,7 +99,7 @@ bool AStarSolver::MoveDown()
 		uint16_t heuristic = HeuristicFunction(currentPuzzle->GetMatrix(), _solution.data(), _solution.size(), _puzzle->GetWidth(), _puzzle->GetHeight());
 
 		if (heuristic == 0) {
-			_sequence[_recursionLevel-1] = 'D';
+			_sequence[_recursionLevel] = 'D';
 			return true;
 		}
 		queue.push(Node{ std::unique_ptr<FifteenBase::IFifteen>(currentPuzzle->Clone()), heuristic, _recursionLevel, 'D' });
