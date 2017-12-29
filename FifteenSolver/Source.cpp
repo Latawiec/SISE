@@ -89,18 +89,18 @@ int main()
 
 	std::vector<uint8_t> solution = SOLUTION4x4;
 	IFifteen* puzzleHandle = puzzle.get();
-	//std::unique_ptr<IFifteenSolver> solver = std::make_unique<DFSSolver>(std::move(puzzle), solution, "rdul");
+	std::unique_ptr<IFifteenSolver> solver = std::make_unique<BFSSolver>(std::move(puzzle), solution, "rdul");
 	
-	std::shared_ptr<IFifteenSolver> solver = std::make_shared<AStarSolver>(std::move(puzzle), solution, [](const uint8_t* tabA, const uint8_t* tabB, uint8_t size, uint8_t width = 0, uint8_t height = 0)->uint16_t
-	{
-		//Hamming
-		uint16_t result{};
-		while (0 <-- size)
-		{
-			if (tabA[size] != tabB[size]) result++;
-		}
-		return result;
-	});
+	//std::shared_ptr<IFifteenSolver> solver = std::make_shared<AStarSolver>(std::move(puzzle), solution, [](const uint8_t* tabA, const uint8_t* tabB, uint8_t size, uint8_t width = 0, uint8_t height = 0)->uint16_t
+	//{
+	//	//Hamming
+	//	uint16_t result{};
+	//	while (0 <-- size)
+	//	{
+	//		if (tabA[size] != tabB[size]) result++;
+	//	}
+	//	return result;
+	//});
 
 	//std::shared_ptr<IFifteenSolver> solver = std::make_shared<AStarSolver>(std::move(puzzle), solution,
 	//	[](const uint8_t* tabA, const uint8_t* tabB, uint8_t size, uint8_t width = 0, uint8_t height = 0)->uint16_t

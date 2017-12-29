@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <cassert>
 #include "FifteenSolver.h"
 
 class BFSSolver : public FifteenSolver

@@ -3,6 +3,7 @@
 #include <vector>
 #include <functional>
 #include <unordered_set>
+#include <cassert>
 
 #include "FifteenSolver.h"
 

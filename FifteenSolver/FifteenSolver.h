@@ -2,7 +2,6 @@
 #include <memory>
 #include <vector>
 
-#include "boost/functional/hash.hpp"
 #include "IFifteenSolver.h"
 #include "FifteenBase/IFifteen.h"
 

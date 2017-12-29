@@ -1,5 +1,6 @@
 #pragma once
 #include "FifteenSolver.h"
+#include <functional>
 #include <queue>
 class AStarSolver : public FifteenSolver
 {
